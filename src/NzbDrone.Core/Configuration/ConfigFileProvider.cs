@@ -38,14 +38,12 @@ namespace NzbDrone.Core.Configuration
         AuthenticationType AuthenticationMethod { get; }
         AuthenticationRequiredType AuthenticationRequired { get; }
         string AllowedHosts { get; }
-        bool AnalyticsEnabled { get; }
         string LogLevel { get; }
         string ConsoleLogLevel { get; }
         ConsoleLogFormat ConsoleLogFormat { get; }
         bool LogSql { get; }
         int LogRotate { get; }
         int LogSizeLimit { get; }
-        bool FilterSentryEvents { get; }
         string Branch { get; }
         string ApiKey { get; }
         string SslCertPath { get; }
@@ -240,8 +238,6 @@ namespace NzbDrone.Core.Configuration
 
         public string AllowedHosts => _serverOptions.AllowedHosts ?? GetValue("AllowedHosts", string.Empty);
 
-        public bool AnalyticsEnabled => _logOptions.AnalyticsEnabled ?? GetValueBoolean("AnalyticsEnabled", true, persist: false);
-
         public string Branch => _updateOptions.Branch ?? GetValue("Branch", "master").ToLowerInvariant();
 
         public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "debug").ToLowerInvariant();
@@ -265,7 +261,6 @@ namespace NzbDrone.Core.Configuration
         public bool LogSql => _logOptions.Sql ?? GetValueBoolean("LogSql", false, persist: false);
         public int LogRotate => _logOptions.Rotate ?? GetValueInt("LogRotate", 50, persist: false);
         public int LogSizeLimit => Math.Min(Math.Max(_logOptions.SizeLimit ?? GetValueInt("LogSizeLimit", 1, persist: false), 0), 10);
-        public bool FilterSentryEvents => _logOptions.FilterSentryEvents ?? GetValueBoolean("FilterSentryEvents", true, persist: false);
         public string SslCertPath => _serverOptions.SslCertPath ?? GetValue("SslCertPath", "");
         public string SslCertPassword => _serverOptions.SslCertPassword ?? GetValue("SslCertPassword", "");
 

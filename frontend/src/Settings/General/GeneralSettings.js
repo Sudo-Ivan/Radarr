@@ -10,7 +10,6 @@ import PageContentBody from 'Components/Page/PageContentBody';
 import { kinds } from 'Helpers/Props';
 import SettingsToolbar from 'Settings/SettingsToolbar';
 import translate from 'Utilities/String/translate';
-import AnalyticSettings from './AnalyticSettings';
 import BackupSettings from './BackupSettings';
 import HostSettings from './HostSettings';
 import LoggingSettings from './LoggingSettings';
@@ -160,11 +159,6 @@ class GeneralSettings extends Component {
 
                 <LoggingSettings
                   advancedSettings={advancedSettings}
-                  settings={settings}
-                  onInputChange={onInputChange}
-                />
-
-                <AnalyticSettings
                   settings={settings}
                   onInputChange={onInputChange}
                 />

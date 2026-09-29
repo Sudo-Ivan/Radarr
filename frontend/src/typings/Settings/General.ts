@@ -14,7 +14,6 @@ export default interface General {
   authenticationMethod: string;
   authenticationRequired: string;
   allowedHosts: string;
-  analyticsEnabled: boolean;
   username: string;
   password: string;
   passwordConfirmation: string;
