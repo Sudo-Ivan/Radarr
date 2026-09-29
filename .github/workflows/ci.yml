@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - remove-telemetry
+      - master
   workflow_dispatch:
 
 permissions: {}

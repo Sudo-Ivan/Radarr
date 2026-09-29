@@ -43,7 +43,7 @@ LABEL org.opencontainers.image.title="Radarr" \
       org.opencontainers.image.base.name="mcr.microsoft.com/dotnet/runtime-deps:8.0-jammy-chiseled-extra"
 
 ENV XDG_CONFIG_HOME=/config/.config \
-    RADARR__BRANCH__NAME=remove-telemetry \
+    RADARR__BRANCH__NAME=master \
     RADARR__AUTH__REQUIRED=DisabledForLocalAddresses \
     COMPlus_EnableDiagnostics=0
 
