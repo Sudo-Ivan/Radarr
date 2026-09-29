@@ -191,6 +191,10 @@ namespace NzbDrone.Host
 
             services.AddAppAuthentication();
 
+            services.AddMcpServer()
+                .WithHttpTransport()
+                .WithTools<Radarr.Http.Mcp.RadarrMcpTools>();
+
             services.PostConfigure<ApiBehaviorOptions>(options =>
             {
                 var builtInFactory = options.InvalidModelStateResponseFactory;
@@ -295,6 +299,12 @@ namespace NzbDrone.Host
             app.UseEndpoints(x =>
             {
                 x.MapHub<MessageHub>("/signalr/messages").RequireAuthorization("SignalR");
+
+                if (configFileProvider.McpEnabled)
+                {
+                    x.MapMcp("/mcp");
+                }
+
                 x.MapControllers();
             });
         }

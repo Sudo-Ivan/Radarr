@@ -45,6 +45,8 @@ namespace NzbDrone.Core.Configuration
         int LogRotate { get; }
         int LogSizeLimit { get; }
         string Branch { get; }
+        string UpdateFeedUrl { get; }
+        bool McpEnabled { get; }
         string ApiKey { get; }
         string SslCertPath { get; }
         string SslCertPassword { get; }
@@ -83,6 +85,7 @@ namespace NzbDrone.Core.Configuration
         private readonly AppOptions _appOptions;
         private readonly ServerOptions _serverOptions;
         private readonly UpdateOptions _updateOptions;
+        private readonly McpOptions _mcpOptions;
         private readonly LogOptions _logOptions;
 
         private readonly string _configFile;
@@ -99,6 +102,7 @@ namespace NzbDrone.Core.Configuration
                                   IOptions<AppOptions> appOptions,
                                   IOptions<ServerOptions> serverOptions,
                                   IOptions<UpdateOptions> updateOptions,
+                                  IOptions<McpOptions> mcpOptions,
                                   IOptions<LogOptions> logOptions)
         {
             _cache = cacheManager.GetCache<string>(GetType());
@@ -110,6 +114,7 @@ namespace NzbDrone.Core.Configuration
             _appOptions = appOptions.Value;
             _serverOptions = serverOptions.Value;
             _updateOptions = updateOptions.Value;
+            _mcpOptions = mcpOptions.Value;
             _logOptions = logOptions.Value;
         }
 
@@ -239,6 +244,10 @@ namespace NzbDrone.Core.Configuration
         public string AllowedHosts => _serverOptions.AllowedHosts ?? GetValue("AllowedHosts", string.Empty);
 
         public string Branch => _updateOptions.Branch ?? GetValue("Branch", "master").ToLowerInvariant();
+
+        public string UpdateFeedUrl => _updateOptions.FeedUrl ?? GetValue("UpdateFeedUrl", "https://api.github.com/repos/Sudo-Ivan/Radarr");
+
+        public bool McpEnabled => _mcpOptions.Enabled ?? GetValueBoolean("McpEnabled", false);
 
         public string LogLevel => _logOptions.Level ?? GetValue("LogLevel", "debug").ToLowerInvariant();
         public string ConsoleLogLevel => _logOptions.ConsoleLevel ?? GetValue("ConsoleLogLevel", string.Empty, persist: false);

@@ -115,6 +115,7 @@ namespace NzbDrone.Host
                     services.Configure<ServerOptions>(config.GetSection("Radarr:Server"));
                     services.Configure<LogOptions>(config.GetSection("Radarr:Log"));
                     services.Configure<UpdateOptions>(config.GetSection("Radarr:Update"));
+                    services.Configure<McpOptions>(config.GetSection("Radarr:Mcp"));
                 })
                 .Build();
         }
