@@ -1,20 +1,33 @@
-import { useCallback, useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import useTheme from 'Helpers/Hooks/useTheme';
-import themes from 'Styles/Themes';
+import { useSelector } from 'react-redux';
+import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 
 function ApplyTheme() {
   const theme = useTheme();
+  const { enableColorImpairedMode } = useSelector(createUISettingsSelector());
 
-  const updateCSSVariables = useCallback(() => {
-    Object.entries(themes[theme]).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(`--${key}`, value);
-    });
+  useLayoutEffect(() => {
+    document.documentElement.dataset.theme = theme;
+
+    // Clear variables the old theme injector wrote inline, which would
+    // otherwise outrank the stylesheet tokens.
+    const root = document.documentElement;
+
+    for (const name of Array.from(root.style)) {
+      if (name.startsWith('--')) {
+        root.style.removeProperty(name);
+      }
+    }
   }, [theme]);
 
-  // On Component Mount and Component Update
-  useEffect(() => {
-    updateCSSVariables();
-  }, [updateCSSVariables, theme]);
+  useLayoutEffect(() => {
+    if (enableColorImpairedMode) {
+      document.documentElement.dataset.colorImpaired = '';
+    } else {
+      delete document.documentElement.dataset.colorImpaired;
+    }
+  }, [enableColorImpairedMode]);
 
   return null;
 }
