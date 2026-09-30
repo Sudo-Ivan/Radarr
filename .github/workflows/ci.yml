@@ -212,6 +212,38 @@ jobs:
           IMAGE_DIGEST: ${{ steps.digest.outputs.digest }}
         run: cosign sign --yes "${REGISTRY_IMAGE}@sha256:${IMAGE_DIGEST}"
 
+      - name: Generate SBOM with Syft
+        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
+        with:
+          image: ${{ steps.image.outputs.image }}:latest
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ secrets.GITHUB_TOKEN }}
+          format: spdx-json
+          artifact-name: sbom-${{ github.sha }}
+          output-file: sbom.spdx.json
+          upload-release-assets: false
+
+      - name: Attest SBOM
+        run: cosign attest --yes --type spdxjson --predicate sbom.spdx.json "${REGISTRY_IMAGE}:latest"
+
+      - name: Scan image with Grype
+        id: grype
+        uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
+        with:
+          image: ${{ steps.image.outputs.image }}:latest
+          fail-build: false
+          severity-cutoff: high
+          only-fixed: true
+          output-format: sarif
+          vex: openvex.json
+
+      - name: Upload Grype results
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: ${{ steps.grype.outputs.sarif }}
+          category: grype
+          wait-for-processing: true
+
       - name: Install trivy
         uses: aquasecurity/setup-trivy@81e514348e19b6112ce2a7e3ecbafe19c1e1f567 # v0.3.1
         with:
