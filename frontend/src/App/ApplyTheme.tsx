@@ -1,6 +1,6 @@
 import { useLayoutEffect } from 'react';
-import useTheme from 'Helpers/Hooks/useTheme';
 import { useSelector } from 'react-redux';
+import useTheme from 'Helpers/Hooks/useTheme';
 import createUISettingsSelector from 'Store/Selectors/createUISettingsSelector';
 
 function ApplyTheme() {

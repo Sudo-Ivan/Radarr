@@ -1,7 +1,5 @@
-const themes = {
+export default {
   auto: {},
   light: {},
   dark: {}
 };
-
-export default themes;
